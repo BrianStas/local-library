@@ -20,19 +20,20 @@ function partitionBooksByBorrowedStatus(books) {
 }
 
 function getBorrowersForBook(book, accounts) {
-  const result = [];
   //look at the borrows array for the book
   const {borrows} = book;
   //pull the list of ids and returned status
-  borrows.forEach((borrow)=> {
+ const result =  borrows.reduce((acc=[], borrow={})=> {
     const {id, returned} = borrow;
   //loop through the accounts page
   const matchedUser = accounts.find((account)=> account.id ===id );
   //add the returned status
   matchedUser.returned = returned;
   //push each matched account ID to the result array
-  result.push(matchedUser);
-})
+  acc.push(matchedUser);
+  console.log(acc);
+  return acc;
+}, [])
   //return the first 10 entries in the array
   return result.slice(0,10);
 }

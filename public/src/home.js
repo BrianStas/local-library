@@ -48,13 +48,18 @@ function getMostPopularBooks(books=[]) {
   return bookCount.slice(0,5);
 }
 
+function AuthorFullName(author){
+  const {name: {first, last}}= author;
+  return `${first} ${last}`
+}
+
 function getMostPopularAuthors(books=[], authors=[]) {
   const authorCount = [];
   //find the author id in books
   for (let book of books){
     const {authorId, borrows} = book;
     const matchedAuthor = authors.find((author)=> author.id ===authorId)
-    const {name: {first, last}} = matchedAuthor;
+    
     if (authorCount.length && authorCount.some((element= {}) => element.authorId === authorId)){
       // increase count by borrow.length
       book.count += borrows.length;
@@ -62,7 +67,7 @@ function getMostPopularAuthors(books=[], authors=[]) {
   
     else {
        //create element equal to matched author first, last name and count
-      authorCount.push({"authorId": authorId, "name": `${first} ${last}`, "count": borrows.length})
+      authorCount.push({"authorId": authorId, "name": AuthorFullName(matchedAuthor), "count": borrows.length})
     }
     }
     authorCount.sort((authorA, authorB)=> authorB.count - authorA.count)
